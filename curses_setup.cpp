@@ -33,17 +33,21 @@ void TakedownCurses() {
 	endwin();
 }
 
-void Refresh(void (*CustomBorder)()) {
-	extern WINDOW *main_window;
-	lock_guard<mutex> l(m);
+string GetTime() { 
 	ostringstream ss;
-
 	auto t = std::time(nullptr);
 	auto tm = *std::localtime(&t);
 
 	ss << put_time(&tm, " %H:%M:%S ");
+	return ss.str();
+}
+
+void Refresh(void (*CustomBorder)()) {
+	extern WINDOW *main_window;
+	lock_guard<mutex> l(m);
+
 	box(main_window, 0, 0);
-	mvaddstr(0, COLS - 12, ss.str().c_str());
+	mvaddstr(0, COLS - 12, GetTime().c_str());
 
 	if (CustomBorder) {
 		CustomBorder();
