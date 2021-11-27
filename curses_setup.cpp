@@ -7,19 +7,24 @@ static mutex m;
 void BeginUpdate() {
 	lock_guard<mutex> l(m);
 	erase();
-}	
-	
-void InitCurses() {
-	extern WINDOW *main_window;
+}
 
-	main_window = initscr();
-	cbreak();
-	noecho();
-	nonl();
-	intrflush(stdscr, FALSE);
-	keypad(stdscr, TRUE);
-	nodelay(stdscr, TRUE);
-	curs_set(0);
+/*	This function initializes the curses library and defines its operating state.
+	Specifically, this includes setting up a non-blocking, non-echoing immediate
+	mode.
+*/
+WINDOW * InitCurses() {
+	WINDOW * main_window = initscr();
+	if (main_window) {
+		cbreak();
+		noecho();
+		nonl();
+		intrflush(stdscr, FALSE);
+		keypad(stdscr, TRUE);
+		nodelay(stdscr, TRUE);
+		curs_set(0);
+	}
+	return main_window;
 }
 
 void TakedownCurses() {
@@ -42,8 +47,7 @@ string GetTime() {
 	return ss.str();
 }
 
-void Refresh(void (*CustomBorder)()) {
-	extern WINDOW *main_window;
+void Refresh(WINDOW * main_window, void (*CustomBorder)()) {
 	lock_guard<mutex> l(m);
 
 	box(main_window, 0, 0);

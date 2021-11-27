@@ -6,10 +6,10 @@
 
 using namespace std;
 
-bool keep_going = true;			// externally visible
-WINDOW* main_window = nullptr;	// externally visible
-struct sigaction sigIntHandler; // externally visible
+bool keep_going = true;			// externally visible in signal_handling.cpp, for example.
 
+static WINDOW* main_window = nullptr;
+static struct sigaction sigIntHandler;
 static const auto SLEEP_PERIOD = chrono::milliseconds(100);
 
 void MainLoop() {
@@ -44,7 +44,7 @@ void MainLoop() {
 		}
 
 		if (action != ACTION_NONE) {
-			Refresh();
+			Refresh(main_window);
 		}
 
 		this_thread::sleep_for(SLEEP_PERIOD);
@@ -52,12 +52,13 @@ void MainLoop() {
 }
 
 int main(int argc __attribute__((unused)), char ** argv __attribute__((unused))) {
-	InitCurses();
-	SetSignalHandlers(sigIntHandler);
-
-	MainLoop();
-
-	TakedownCurses();
-	cerr << "Normal shutdown.\n";
+	if ((main_window = InitCurses())) {
+		SetSignalHandlers(sigIntHandler);
+		MainLoop();
+		TakedownCurses();
+		cerr << "Normal shutdown.\n";
+	} else {
+		cerr << "curses failed to initialize.\n";
+	}
 	return 0;
 }

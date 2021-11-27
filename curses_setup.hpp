@@ -7,8 +7,8 @@
 #include <string>
 #include <ncurses.h>
 
-void InitCurses();
+WINDOW * InitCurses();
 void TakedownCurses();
 void BeginUpdate();
-void Refresh(void (*CustomBorder)() = nullptr);
+void Refresh(WINDOW *, void (*CustomBorder)() = nullptr);
 std::string GetTime();

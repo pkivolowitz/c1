@@ -2,7 +2,6 @@
 
 void SIGINT_handler(int s __attribute__((unused))) {
 	extern bool keep_going;
-
 	keep_going = false;
 }
 
