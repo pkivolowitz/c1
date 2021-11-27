@@ -13,7 +13,7 @@ This program sets `ncurses` up to avoid blocking on I/O.
 
 * The downside of this is that the program *will* continue running at all times.
 
-Consequently, the main loop calls the OS `yield()` function as a courtesy.
+Consequently, the main loop calls the  `sleep_for()` function to sleep for 100 milliseconds as a courtesy.
 
 Programs which use ncurses in this way have the potential to leave the user's terminal in an unusable state (typically solved with `stty sane`). To ward this sort of problem away, the program catches `SIGINT` to properly shutdown.
 
