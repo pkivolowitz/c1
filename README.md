@@ -6,7 +6,7 @@ Will this be a game? Will it be a utility? No idea.
 
 ## Non-blocking I/O
 
-This program sets `ncurses` up to avoid blocking on I/O. 
+This program sets `ncurses` up to avoid blocking on I/O.
 
 * The upside of this is that the program
 *can* continue running at all times.
