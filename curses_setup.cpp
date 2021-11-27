@@ -27,6 +27,8 @@ WINDOW * InitCurses() {
 	return main_window;
 }
 
+/*	This function will only be called if curses successfully initialized.
+*/
 void TakedownCurses() {
 	curs_set(1);
 	nodelay(stdscr, FALSE);
@@ -49,12 +51,10 @@ string GetTime() {
 
 void Refresh(WINDOW * main_window, void (*CustomBorder)()) {
 	lock_guard<mutex> l(m);
-
 	box(main_window, 0, 0);
-	mvaddstr(0, COLS - 12, GetTime().c_str());
-
+	mvwaddstr(main_window, 0, COLS - 12, GetTime().c_str());
 	if (CustomBorder) {
 		CustomBorder();
 	}
-	refresh();
+	wrefresh(main_window);
 }
