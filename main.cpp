@@ -1,46 +1,16 @@
-#include <ncurses.h>
-
 #include <iostream>
 
+#include "actions.hpp"
 #include "curses_setup.hpp"
 #include "signal_handling.hpp"
 
 using namespace std;
 
-WINDOW* main_window = nullptr;
-struct sigaction sigIntHandler;
-bool keep_going = true;
+bool keep_going = true;			// externally visible
+WINDOW* main_window = nullptr;	// externally visible
+struct sigaction sigIntHandler; // externally visible
 
-enum ACTION {
-	ACTION_NONE,
-	ACTION_QUIT,
-	ACTION_TEST1,
-	ACTION_TEST2,
-	ACTION_TIME,
-	ACTION_ABOUT
-};
-
-ACTION GetCH() {
-	int c;
-	ACTION action = ACTION_NONE;
-	if ((c = getch()) != ERR) {
-		switch (c) {
-			case 'q':
-			case 'Q':
-				action = ACTION_QUIT;
-				break;
-
-			case KEY_F(1):
-				action = ACTION_TEST1;
-				break;
-
-			case KEY_F(2):
-				action = ACTION_TEST2;
-				break;
-		}
-	}
-	return action;
-}
+static const auto SLEEP_PERIOD = chrono::milliseconds(100);
 
 void MainLoop() {
 	static string previous_time_string;
@@ -77,14 +47,13 @@ void MainLoop() {
 			Refresh();
 		}
 
-		this_thread::sleep_for(chrono::milliseconds(100));
+		this_thread::sleep_for(SLEEP_PERIOD);
 	}
 }
 
-int main(int argc, char** argv) {
+int main(int argc __attribute__((unused)), char ** argv __attribute__((unused))) {
 	InitCurses();
 	SetSignalHandlers(sigIntHandler);
-	Refresh();
 
 	MainLoop();
 

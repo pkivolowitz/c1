@@ -1,0 +1,13 @@
+#pragma once
+#include <ncurses.h>
+
+enum ACTION {
+	ACTION_NONE,
+	ACTION_QUIT,
+	ACTION_TEST1,
+	ACTION_TEST2,
+	ACTION_TIME,
+	ACTION_ABOUT
+};
+
+ACTION GetCH();

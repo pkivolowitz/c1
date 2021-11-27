@@ -1,6 +1,6 @@
 #include "signal_handling.hpp"
 
-void SIGINT_handler(int s) {
+void SIGINT_handler(int s __attribute__((unused))) {
 	extern bool keep_going;
 
 	keep_going = false;
