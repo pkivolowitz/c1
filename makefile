@@ -29,9 +29,9 @@ $(shell mkdir -p $(dir $(DEPS)) >/dev/null)
 # C compiler
 CC := clang
 # C++ compiler
-CXX := clang++
+CXX := g++
 # linker
-LD := clang++
+LD := g++
 # tar
 TAR := tar
 
