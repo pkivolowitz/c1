@@ -17,6 +17,7 @@ void BeginUpdate() {
 	mode.
 */
 WINDOW * InitCurses() {
+	mmask_t old_mask_value;
 	WINDOW * main_window = initscr();
 	if (main_window) {
 		cbreak();
@@ -26,6 +27,7 @@ WINDOW * InitCurses() {
 		keypad(stdscr, TRUE);
 		nodelay(stdscr, TRUE);
 		curs_set(0);
+		mousemask(BUTTON1_RELEASED, &old_mask_value);
 	}
 	return main_window;
 }

@@ -14,12 +14,13 @@ static const auto SLEEP_PERIOD = chrono::milliseconds(100);
 
 void MainLoop() {
 	static string previous_time_string;
+	MEVENT mouse_event;
 
 	while (keep_going) {
 		string current_time_string = GetTime();
 		ACTION action;
 
-		action = (previous_time_string != current_time_string) ? ACTION_TIME : GetCH();
+		action = (previous_time_string != current_time_string) ? ACTION_TIME : GetCH(mouse_event);
 		previous_time_string = current_time_string;
 
 		// If ACTION_QUIT - leave the main loop.
@@ -40,6 +41,13 @@ void MainLoop() {
 
 			case ACTION_TEST1:
 				mvaddch(10, 10, '*');
+				break;
+
+			case ACTION_MOUSEUP:
+				stringstream ss;
+				ss << "Mouse up: " << mouse_event.x << ", " << mouse_event.y << ", " << mouse_event.z;
+				clear();
+				mvaddstr(10, 10, ss.str().c_str());
 				break;
 		}
 
