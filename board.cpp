@@ -46,8 +46,20 @@ int Board::Probe(const int x, const int y) {
 }
 
 void Board::Render() {
-	for (auto & r : board) {
-		stringstream ss;
+	int row_counter = 1;
+	for (auto& r : board) {
+		move(row_counter++, 1);
+		for (auto & c : r) {
+			addch(c.IsVisible() ? c.GetSymbol() : ' ');
+			if (&c != &r.back())
+				addch(ACS_VLINE);
+		}
+		move(row_counter++, 1);
+		for (int i = 0; i < COLS - 2; i++) {
+			addch(ACS_HLINE);
+			if (i != COLS - 3) 
+				addch(ACS_PLUS);
+		}
 	}
 }
 /*

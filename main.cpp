@@ -55,7 +55,7 @@ void MainLoop(Board & board) {
 		}
 
 		if (action != ACTION_NONE) {
-
+			board.Render();
 			Refresh(main_window);
 		}
 

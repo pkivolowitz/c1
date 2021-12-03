@@ -2,6 +2,7 @@
 #include <cassert>
 #include <sstream>
 #include <vector>
+#include <ncurses.h>
 
 struct Cell {
 	Cell();
