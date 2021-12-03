@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "actions.hpp"
+#include "board.hpp"
 #include "curses_setup.hpp"
 #include "signal_handling.hpp"
 
@@ -28,6 +29,9 @@ void MainLoop() {
 			break;
 		}
 
+		if (action != ACTION_NONE) {
+			clear();
+		}
 		switch (action) {
 			default:
 				// A default case is useful when switching on an enum as
@@ -36,7 +40,7 @@ void MainLoop() {
 				break;
 
 			case ACTION_TEST2:
-				mvaddch(10, 10, ' ');
+				mvaddch(10, 10, ACS_LRCORNER);		
 				break;
 
 			case ACTION_TEST1:
@@ -46,7 +50,6 @@ void MainLoop() {
 			case ACTION_MOUSEUP:
 				stringstream ss;
 				ss << "Mouse up: " << mouse_event.x << ", " << mouse_event.y << ", " << mouse_event.z;
-				clear();
 				mvaddstr(10, 10, ss.str().c_str());
 				break;
 		}
@@ -60,12 +63,14 @@ void MainLoop() {
 }
 
 int main(int argc __attribute__((unused)), char ** argv __attribute__((unused))) {
+	setlocale(LC_ALL, "");
 	if ((main_window = InitCurses())) {
 		SetSignalHandlers(sigIntHandler);
 		MainLoop();
 		TakedownCurses();
 		cerr << "Normal shutdown.\n";
-	} else {
+	}
+	else {
 		cerr << "curses failed to initialize.\n";
 	}
 	return 0;

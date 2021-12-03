@@ -12,6 +12,16 @@ void BeginUpdate() {
 	erase();
 }
 
+/*	This function resizes the terminal to ensure that the number of
+	lines and columns are effectively odd (the terminal window does
+	not actually change).
+*/
+static void AdjustWindowSize() {
+	LINES = (LINES & 1) ? LINES : LINES - 1;
+	COLS = (COLS & 1) ? COLS : COLS - 1;
+	resizeterm(LINES, COLS);
+}
+
 /*	This function initializes the curses library and defines its operating state.
 	Specifically, this includes setting up a non-blocking, non-echoing immediate
 	mode.
@@ -28,6 +38,7 @@ WINDOW * InitCurses() {
 		nodelay(stdscr, TRUE);
 		curs_set(0);
 		mousemask(BUTTON1_RELEASED, &old_mask_value);
+		AdjustWindowSize();
 	}
 	return main_window;
 }
@@ -67,7 +78,7 @@ void Refresh(WINDOW * main_window, void (*CustomBorder)(WINDOW *)) {
 	// and threads do not play well together.
 	lock_guard<mutex> l(m);
 	box(main_window, 0, 0);
-	mvwaddstr(main_window, 0, COLS - 12, GetTime().c_str());
+	mvwaddstr(main_window, 0, COLS - 11, GetTime().c_str());
 	if (CustomBorder) {
 		CustomBorder(main_window);
 	}
