@@ -13,7 +13,7 @@ static WINDOW* main_window = nullptr;
 static struct sigaction sigIntHandler;
 static const auto SLEEP_PERIOD = chrono::milliseconds(100);
 
-void MainLoop() {
+void MainLoop(Board & board) {
 	static string previous_time_string;
 	MEVENT mouse_event;
 
@@ -55,6 +55,7 @@ void MainLoop() {
 		}
 
 		if (action != ACTION_NONE) {
+
 			Refresh(main_window);
 		}
 
@@ -63,10 +64,10 @@ void MainLoop() {
 }
 
 int main(int argc __attribute__((unused)), char ** argv __attribute__((unused))) {
-	setlocale(LC_ALL, "");
 	if ((main_window = InitCurses())) {
+		Board board(COLS, LINES, 0.1);
 		SetSignalHandlers(sigIntHandler);
-		MainLoop();
+		MainLoop(board);
 		TakedownCurses();
 		cerr << "Normal shutdown.\n";
 	}
